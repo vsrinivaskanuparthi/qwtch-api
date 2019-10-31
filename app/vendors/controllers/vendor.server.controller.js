@@ -21,7 +21,7 @@ module.exports.getVendors = (req, res) => {
             res.status(err.status || err.statusCode || err.code || 500).send({ message: err });
         } else {
             logger.info('getVendors function has executed successfully')
-            res.send(JSON.stringify({ "status": 200, "response": results }));
+            res.send({ "status": 200, "response": results });
         }
     });
 
@@ -31,14 +31,14 @@ module.exports.getVendorById = (req, res) => {
     if (!req.params.vendorId || req.params.vendorId === undefined) {
         res.status(400).send({ status: 400, message: 'bad request vendor id required in params' });
     }
-    let sql = util.format("SELECT * FROM qw_vendor WHERE vendor_id='%s'", req.params.vendor_id);
+    let sql = util.format("SELECT * FROM qw_vendor WHERE vendor_id='%s'", req.params.vendorId);
     dbQuery.executeQuery(sql, (err, results) => {
         if (err) {
             logger.error('getVendorById function has error', err.message || err)
             res.status(err.status || err.statusCode || err.code || 500).send({ message: err });
         } else {
             logger.info('getVendorById function has executed successfully')
-            res.send(JSON.stringify({ "status": 200, "response": results }));
+            res.send({ "status": 200, "response": results });
         }
     });
 };
@@ -55,7 +55,7 @@ module.exports.saveVendor = (req, res) => {
             res.status(err.status || err.statusCode || err.code || 500).send({ message: err });
         } else {
             logger.info('saveVendor function has executed successfully')
-            res.send(JSON.stringify({ "status": 200, "response": results }));
+            res.send({ "status": 200, "response": results });
         }
     });
 };
@@ -71,7 +71,7 @@ module.exports.updateVendor = (req, res) => {
             res.status(err.status || err.statusCode || err.code || 500).send({ message: err });
         } else {
             logger.info('updateVendor function has executed successfully')
-            res.send(JSON.stringify({ "status": 200, "response": results }));
+            res.send({ "status": 200, "response": results });
         }
     });
 };
@@ -87,7 +87,7 @@ module.exports.deleteVendor = (req, res) => {
             res.status(err.status || err.statusCode || err.code || 500).send({ message: err });
         } else {
             logger.info('deleteVendor function has executed successfully')
-            res.send(JSON.stringify({ "status": 200, "response": results }));
+            res.send({ "status": 200, "response": results });
         }
     });
 };
