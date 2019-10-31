@@ -1,7 +1,0 @@
-# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION BEGIN
-PassengerAppRoot "/home/qwtchcom/public_html/api"
-PassengerBaseURI "/api"
-PassengerNodejs "/home/qwtchcom/nodevenv/public_html/api/10/bin/node"
-PassengerAppType node
-PassengerStartupFile index.js
-# DO NOT REMOVE. CLOUDLINUX PASSENGER CONFIGURATION END
