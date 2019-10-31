@@ -22,6 +22,7 @@ module.exports.initDBConnections = function () {
                 logger.error('Mysql Database Connection Error Occured')
                 throw err;
             } else {
+		console.log('Mysql Database Connection Established Successfully.....');
                 logger.info('Mysql Database Connection Established Successfully...');
             }
         });
