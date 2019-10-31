@@ -1,0 +1,9 @@
+apps:
+  - script   : './server.js'
+    name     : 'api-server'
+    max_memory_restart: 1024M
+    log_date_format: 'YYYY-MM-DD HH:mm:ss SSS'
+    out_file: '/logs/app_stdout.log'
+    error_file: '/logs/app_stderr.log'
+    max_restarts: 10
+    restart_delay: 4000
