@@ -8,7 +8,7 @@ const logger = require('../../config/logger').log4js.getLogger('qwtch.api.contro
 
 module.exports.executeQuery = (query, data, cb) => {
     try {
-        if (query && query !== undefined) {
+        if (data && data !== undefined) {
             db.query(query, data, (err, response) => {
                 if (err) {
                     logger.error('executeQuery function has error while executing query', err.message ? err.message : err)

@@ -7,8 +7,8 @@
 const util = require('util');
 
 
-const logger = require('../../config/logger').log4js.getLogger('qwtch.api.controller');
-const dbQuery = require('../../config/constants/dbQuery');
+const logger = require('../../../config/logger').log4js.getLogger('qwtch.api.controller');
+const dbQuery = require('../../../config/constants/dbQuery');
 
 
 
