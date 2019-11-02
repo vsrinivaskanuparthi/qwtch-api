@@ -4,90 +4,80 @@
  * Module dependencies.
  */
 
-const util = require('util');
+var util = require('util');
 
 
-const logger = require('../../../config/logger').log4js.getLogger('qwtch.api.controller');
-const dbQuery = require('../../../config/constants/dbQuery');
+var logger = require('../../../config/logger').log4js.getLogger('vendor.server.controller'),
+    vendorService = require('../../vendors/services/vendor.server.service'),
+    dbQuery = require('../../../config/constants/dbQuery');
+
 
 
 
 module.exports.getVendors = (req, res) => {
 
-    let sql = "SELECT * FROM qw_vendor";
-    dbQuery.executeQuery(sql, (err, results) => {
+    vendorService.getVendors((err, response) => {
         if (err) {
-            logger.error('getVendors function has error', err.message || err)
-            res.status(err.status || err.statusCode || err.code || 500).send({ message: err });
+            res.send({ status: err.errno || 500, message: err });
         } else {
-            logger.info('getVendors function has executed successfully')
-            res.send({ "status": 200, "response": results });
+            res.send(response);
         }
-    });
+    })
 
 };
 
 module.exports.getVendorById = (req, res) => {
+
     if (!req.params.vendorId || req.params.vendorId === undefined) {
-        res.status(400).send({ status: 400, message: 'bad request vendor id required in params' });
+        res.send({ status: 400, message: 'bad request vendor id required in params' });
     }
-    let sql = util.format("SELECT * FROM qw_vendor WHERE vendor_id='%s'", req.params.vendorId);
-    dbQuery.executeQuery(sql, (err, results) => {
+    vendorService.getVendorById(req.body, (err, response) => {
         if (err) {
-            logger.error('getVendorById function has error', err.message || err)
-            res.status(err.status || err.statusCode || err.code || 500).send({ message: err });
+            res.send({ status: err.errno || 500, message: err });
         } else {
-            logger.info('getVendorById function has executed successfully')
-            res.send({ "status": 200, "response": results });
+            res.send(response);           
         }
     });
 };
 
 module.exports.saveVendor = (req, res) => {
+
     if (!Object.keys(req.body).length) {
-        res.status(400).send({ status: 400, message: 'bad request vendor details required to save vendor' });
+        res.send({ status: 400, message: 'bad request vendor details required to save vendor' });
     }
-    let data = { vendor_name: req.body.vendor_name, vendor_address: req.body.vendor_address };
-    let sql = "INSERT INTO qw_vendor SET ?";
-    dbQuery.executeQuery(sql, data, (err, results) => {
+    vendorService.saveVendor(req.body, (err, response) => {
         if (err) {
-            logger.error('saveVendor function has error', err.message || err)
-            res.status(err.status || err.statusCode || err.code || 500).send({ message: err });
+            res.send({ status: err.errno || 500, message: err });
         } else {
-            logger.info('saveVendor function has executed successfully')
-            res.send({ "status": 200, "response": results });
+            res.send(response);           
         }
     });
 };
 
 module.exports.updateVendor = (req, res) => {
+
     if (!Object.keys(req.body).length || !req.params.vendorId || req.params.vendorId === undefined) {
-        res.status(400).send({ status: 400, message: 'data required in body to update the entity' });
+        res.send({ status: 400, message: 'data required in body to update the entity' });
     }
-    let sql = util.format("UPDATE qw_vendor SET vendor_name='%s', vendor_address='%s' WHERE vendor_id=%s", req.body.vendor_name, req.body.vendor_address, req.params.vendorId);
-    dbQuery.executeQuery(sql, data, (err, results) => {
+    vendorService.updateVendor(req.body, (err, response) => {
         if (err) {
-            logger.error('updateVendor function has error', err.message || err)
-            res.status(err.status || err.statusCode || err.code || 500).send({ message: err });
+            res.send({ status: err.errno || 500, message: err });
         } else {
-            logger.info('updateVendor function has executed successfully')
-            res.send({ "status": 200, "response": results });
+            res.send(response);           
         }
     });
 };
 
 module.exports.deleteVendor = (req, res) => {
+
     if (!req.params.vendorId || req.params.vendorId === undefined) {
-        res.status(400).send({ status: 400, message: 'bad request vendor id required in params to delete vendor' });
+        res.send({ status: 400, message: 'bad request vendor id required in params to delete vendor' });
     }
-    let sql = util.format("DELETE FROM qw_vendor WHERE vendor_id=%s", req.params.id);
-    dbQuery.executeQuery(sql, data, (err, results) => {
+    vendorService.deleteVendor(req.body, (err, response) => {
         if (err) {
-            logger.error('deleteVendor function has error', err.message || err)
-            res.status(err.status || err.statusCode || err.code || 500).send({ message: err });
+            res.send({ status: err.errno || 500, message: err });
         } else {
-            logger.info('deleteVendor function has executed successfully')
-            res.send({ "status": 200, "response": results });
+            res.send(response);           
         }
     });
 };

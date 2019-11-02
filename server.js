@@ -2,10 +2,13 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const config = require('./config/config')
 const path = require('path');
-const logger = require('./config/logger').log4js.getLogger('server.js')
+const logger = require('./config/logger').log4js.getLogger('server.js');
+const helmet = require('helmet');
+const tokenUtil = require('./config/utils/token-util');
 
 
 
+//initialize express application
 const app = express();
 
 
@@ -16,6 +19,19 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json({
   limit: '10mb'
 }));
+
+
+// Use helmet to secure Express headers
+app.use(helmet({
+  frameguard: {
+    action: 'deny'
+  }
+}));
+app.use(helmet.xssFilter());
+app.use(helmet.noSniff());
+app.use(helmet.ieNoOpen());
+app.use(helmet.noCache());
+app.disable('x-powered-by');
 
 app.use(function (req, res, next) {
   var oneof = false;
@@ -41,6 +57,38 @@ app.use(function (req, res, next) {
     next();
   }
 });
+
+app.use(function (req, res, next) {
+  var authToken = req.headers.authorization;
+  if (authToken) {
+    tokenUtil.verify(authToken, function (err, decrypted) {
+      if (err) {
+        res.clearCookie('Authorization');
+        res.clearCookie('user')
+        res.clearCookie('token');
+        res.status(401).send({
+          message: 'token expired',
+          code: 'TE401'
+        });
+      } else {
+        req.token = {
+          username: decrypted.username,
+          email: decrypted.email,
+          userId: decrypted.userId
+        };
+        next();
+      }
+    });
+  } else if (isWhitelist(req)) {
+    next();
+  } else {
+    res.status(401).send('Not authorized to access this resource');
+  }
+});
+
+function isWhitelist(req) {
+  return (req.path.indexOf("/favicon.ico") > -1 || req.path.indexOf("/auth/") > -1 || req.path.indexOf("/api/auth/") > -1 || req.path.indexOf("/api/auth/forgot") > -1 || req.path.indexOf("/api/auth/reset") > -1 || req.path.indexOf("/api/public") > -1) ||  req.path.indexOf("/api/user/register") > -1
+}
 
 const dbConnection = require('./config/constants/dbConnection')
 
