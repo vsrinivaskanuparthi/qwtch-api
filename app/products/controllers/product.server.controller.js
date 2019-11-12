@@ -31,9 +31,9 @@ module.exports.getProducts = (req, res) => {
 
 module.exports.getProductById = (req, res) => {
 
-    if (!req.params.vendorId || req.params.vendorId === undefined) {
+    if (!req.params.productId || req.params.productId === undefined) {
         logger.error('getProductById function has validation error');
-        res.send({ status: 400, message: 'bad request vendor id required in params' });
+        res.send({ status: 400, message: 'bad request product id required in params' });
     }
     try {
         productService.getProductById(req.params, (err, response) => {

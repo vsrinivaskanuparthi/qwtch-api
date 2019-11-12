@@ -24,7 +24,7 @@ module.exports.signIn = (userObj, cb) => {
                 let sql = util.format("SELECT * FROM wp_users WHERE user_login='%s'", userObj.user_login);
                 dbQuery.executeQuery(sql, (err, results) => {
                     if (err) {
-                        logger.error('getVendorById function has error', err.message || err)
+                        logger.error('signIn function has error', err.message || err)
                         res.status(err.status || err.statusCode || err.code || 500).send({ message: err });
                     } else {
                         if (results && results.length) {
